@@ -52,7 +52,7 @@ sub cap_cmd {
 }
 
 $proclet->service(
-    every => '* * * * *',
+    every => '3 * * * *',
     tag => 'cron',
     code => sub {
         warn "Try to cpanm -lCoreList-lib Module::CoreList\n";

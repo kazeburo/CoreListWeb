@@ -11,6 +11,16 @@ body {
   padding-top: 0px;
   padding-bottom: 20px;
 }
+#footer {
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+#footer .container .text-muted {
+  text-align: center;
+  margin: 0px;
+}
+
 </style>
 </head>
 <body>
@@ -44,6 +54,12 @@ body {
 
 
 : block content -> { }
+
+<div id="footer">
+  <div class="container">
+    <p class="text-muted"><a href="https://github.com/kazeburo/CoreListWeb">source code</a></p>
+  </div>
+</div>
 
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>

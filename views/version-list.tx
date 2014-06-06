@@ -1,0 +1,16 @@
+: cascade base
+: around content -> {
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Versions</h2>
+      <ul id="version-menu-body">
+      : for $versions -> $version {
+        <li><a href="/v/<: $version.version :>"><: $version.formated :></a></li>
+      : }
+      </ul>
+    </div>
+  </div>
+</div>
+: }

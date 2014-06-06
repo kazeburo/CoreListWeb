@@ -1,0 +1,24 @@
+: cascade base
+: around content -> {
+
+<div class="container">
+ <div class="jumbotron">
+  <h1>Web::Module::CoreList</h1>
+  <p>This is a web interface for <a href="https://metacpan.org/release/Module-CoreList">Module::CoreList</a>.</p>
+  <p>You can learn the Perl5 core modules are introduced in which version.</p>
+  <p><a class="btn btn-primary btn-lg" href="/version-list">Search versions &raquo;</a></p>
+ </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Current version</h2>
+      <p>Current Module::CoreList version is: <i><: $corelist_version :></i>.</p>
+    </div>
+  </div>
+</div>
+
+
+: }
+

@@ -1,0 +1,19 @@
+: cascade base
+: around content -> {
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2><: $module :> - <a href="https://metacpan.org/module/<: uri_escape($module) :>">goto metacpan;</a></h2>
+      <table class="table table-hover">
+      : for $versions -> $version {
+        <tr>
+            <td align="left"><a href="/v/<: $version.perl :>"><: $version.perl_formated :></a></td>
+            <td align="right"><: $version.module :></td>
+        </tr>
+      : }
+      </table>
+    </div>
+  </div>
+</div>
+: }

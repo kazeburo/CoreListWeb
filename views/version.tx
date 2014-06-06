@@ -1,0 +1,18 @@
+: cascade base
+: around content -> {
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Core modules in version <: $formated_version :></h2>
+      <table class="table table-hover">
+        : for $modules -> $module {
+        <tr>
+            <td align="left"><a href="/m/<: $module.name :>"><: $module.name :></a></td>
+            <td align="right"><: $module.version :></td>
+        </tr>
+        : }
+      </table>
+    </div>
+  </div>
+</div>
+: }

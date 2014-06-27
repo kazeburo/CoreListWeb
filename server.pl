@@ -52,7 +52,7 @@ sub cap_cmd {
 }
 
 $proclet->service(
-    every => '10 * * * *',
+    every => '19 * * * *',
     tag => 'cron',
     code => sub {
         warn "Try to cpanm -ltmp/CoreList-lib Module::CoreList\n";
@@ -65,14 +65,18 @@ $proclet->service(
             warn "KILLHUP server-starter ($pid)\n";
             kill 'HUP', $pid;
         }
+        if ( $result =~ m!failed\. See (.+) for details! ) { 
+            open(my $log, "<", $1) or die "$@";
+            warn $_ for <$log>;
+        }
     }
 );
 
 $proclet->service(
     code => sub {
         warn "Start CoreListWeb::Web $$\n";
-        exec(qw!start_server --port!,$port,qw!--pid-file server.pid  --!,
-             qw!plackup -Mlib=CoreList-lib/lib/perl5 -E production -s Starlet --max-workers 10 -a  app.psgi!);
+        exec(qw!start_server --port!,$port,qw!--pid-file tmp/server.pid  --!,
+             qw!plackup -Mlib=tmp/CoreList-lib/lib/perl5 -E production -s Starlet --max-workers 10 -a  app.psgi!);
     },
     tag => 'web',
 );

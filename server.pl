@@ -52,7 +52,7 @@ sub cap_cmd {
 }
 
 $proclet->service(
-    every => '25 * * * *',
+    every => '30 * * * *',
     tag => 'cron',
     code => sub {
         warn "Try to cpanm -ltmp/CoreList-lib Module::CoreList\n";
@@ -60,6 +60,7 @@ $proclet->service(
         my $pid = <$fh>;
         chomp $pid;
         close($fh);
+        local $ENV{PERL_CPANM_HOME} = "$FindBin::Bin/tmp";
         my ($result,$exit_code) = cap_cmd(['cpanm','-ltmp/CoreList-lib','Module::CoreList']);
         if ( $exit_code == 0 && $result =~ m!Successfully installed Module-CoreList! ) {
             warn "KILLHUP server-starter ($pid)\n";

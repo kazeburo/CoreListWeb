@@ -52,11 +52,11 @@ sub cap_cmd {
 }
 
 $proclet->service(
-    every => '22 * * * *',
+    every => '25 * * * *',
     tag => 'cron',
     code => sub {
         warn "Try to cpanm -ltmp/CoreList-lib Module::CoreList\n";
-        open(my $fh, "<", "server.pid") or die "$@";
+        open(my $fh, "<", "tmp/server.pid") or die "$@";
         my $pid = <$fh>;
         chomp $pid;
         close($fh);

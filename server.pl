@@ -32,6 +32,8 @@ sub cap_cmd {
     elsif ( $pid == 0 ) {
         #child
         close $logrh;
+        open STDERR, '>&', $logwh
+            or die "Died: failed to redirect STDERR";
         open STDOUT, '>&', $logwh
             or die "Died: failed to redirect STDOUT";
         close $logwh;
@@ -41,7 +43,7 @@ sub cap_cmd {
     close $logwh;
     my $result;
     while(<$logrh>){
-        warn $_;
+        warn "cap_cmd:".$_;
         $result .= $_;
     }
     close $logrh;
@@ -52,7 +54,7 @@ sub cap_cmd {
 }
 
 $proclet->service(
-    every => '30 * * * *',
+    every => '38 * * * *',
     tag => 'cron',
     code => sub {
         warn "Try to cpanm -ltmp/CoreList-lib Module::CoreList\n";

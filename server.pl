@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use FindBin;
 use lib "$FindBin::Bin/lib";
-use lib "$FindBin::Bin/CoreList-lib";
+use lib "$FindBin::Bin/tmp/CoreList-lib";
 use Proclet;
 use Plack::Loader;
 use Plack::Builder;
@@ -52,15 +52,15 @@ sub cap_cmd {
 }
 
 $proclet->service(
-    every => '3 * * * *',
+    every => '10 * * * *',
     tag => 'cron',
     code => sub {
-        warn "Try to cpanm -lCoreList-lib Module::CoreList\n";
+        warn "Try to cpanm -ltmp/CoreList-lib Module::CoreList\n";
         open(my $fh, "<", "server.pid") or die "$@";
         my $pid = <$fh>;
         chomp $pid;
         close($fh);
-        my ($result,$exit_code) = cap_cmd(['cpanm','-lCoreList-lib','Module::CoreList']);
+        my ($result,$exit_code) = cap_cmd(['cpanm','-ltmp/CoreList-lib','Module::CoreList']);
         if ( $exit_code == 0 && $result =~ m!Successfully installed Module-CoreList! ) {
             warn "KILLHUP server-starter ($pid)\n";
             kill 'HUP', $pid;

@@ -10,6 +10,7 @@ use Plack::Loader;
 use Plack::Builder;
 use Plack::Builder::Conditionals;
 use Getopt::Long;
+use HTTP::Tiny;
 
 my $port = 5000;
 Getopt::Long::Configure ("no_ignore_case");
@@ -54,7 +55,7 @@ sub cap_cmd {
 }
 
 $proclet->service(
-    every => '40 * * * *',
+    every => '10,40 * * * *',
     tag => 'cron',
     code => sub {
         warn "Try to cpanm -ltmp/CoreList-lib Module::CoreList\n";
@@ -74,6 +75,18 @@ $proclet->service(
         }
     }
 );
+
+if ( $ENV{DYNO} ) {
+    warn "detect DYNO. add ping_web service\n";
+    $proclet->service(
+        every => '16,46 * * * *',
+        tag => 'ping_web',
+        code => sub {
+            my $ua = HTTP::Tiny->new;
+            $ua->get('http://perl-corelistweb.herokuapp.com/');
+        }
+    );
+}
 
 $proclet->service(
     code => sub {

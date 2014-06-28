@@ -55,7 +55,7 @@ sub cap_cmd {
 }
 
 $proclet->service(
-    every => '10,40 * * * *',
+    every => '28,58 * * * *',
     tag => 'cron',
     code => sub {
         warn "Try to cpanm -ltmp/CoreList-lib Module::CoreList\n";
@@ -73,7 +73,7 @@ $proclet->service(
             open(my $log, "<", $1) or die "$@";
             warn $_ for <$log>;
         }
-    }
+    },
 );
 
 if ( $ENV{DYNO} ) {

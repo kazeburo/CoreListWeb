@@ -6,4 +6,4 @@ requires 'JSON::XS';
 requires 'HTTP::Parser::XS';
 requires 'Module::CoreList','2.18'; #auto update
 requires 'Proclet';
-
+requires 'HTTP::Tiny';

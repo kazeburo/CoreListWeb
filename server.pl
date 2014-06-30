@@ -44,7 +44,7 @@ sub cap_cmd {
     close $logwh;
     my $result;
     while(<$logrh>){
-        warn "cap_cmd:".$_;
+        warn $cmdref->[0]." : ".$_;
         $result .= $_;
     }
     close $logrh;
@@ -54,24 +54,30 @@ sub cap_cmd {
     return ($result, $exit_code);
 }
 
+sub update_corelist {
+    local $ENV{PERL_CPANM_HOME} = "$FindBin::Bin/tmp";
+    my ($result, $exit_code) = cap_cmd(['cpanm','-n','--no-man-pages','-ltmp/CoreList-lib','Module::CoreList']);
+    if ( $result =~ m!failed\. See (.+) for details! ) { 
+        cap_cmd('tail','-10',$1);
+    }
+    return ($result, $exit_code);
+}
+
+update_corelist();
+
 $proclet->service(
     every => '28,58 * * * *',
     tag => 'cron',
     code => sub {
-        warn "Try to cpanm -ltmp/CoreList-lib Module::CoreList\n";
+        warn "Try to cpanm Module::CoreList\n";
         open(my $fh, "<", "tmp/server.pid") or die "$@";
         my $pid = <$fh>;
         chomp $pid;
         close($fh);
-        local $ENV{PERL_CPANM_HOME} = "$FindBin::Bin/tmp";
-        my ($result,$exit_code) = cap_cmd(['cpanm','-n','-ltmp/CoreList-lib','Module::CoreList']);
+        my ($result, $exit_code) = update_corelist();
         if ( $exit_code == 0 && $result =~ m!Successfully installed Module-CoreList! ) {
             warn "KILLHUP server-starter ($pid)\n";
             kill 'HUP', $pid;
-        }
-        if ( $result =~ m!failed\. See (.+) for details! ) { 
-            open(my $log, "<", $1) or die "$@";
-            warn $_ for <$log>;
         }
     },
 );

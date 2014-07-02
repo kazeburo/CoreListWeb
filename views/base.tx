@@ -40,7 +40,7 @@ body {
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li><a href="<: $c.req.uri_for('/') :>">Top</a></li>
-        <li><a href="<: $c.req.uri_for('/version-list') :>">Versions</a></li>
+        <li><a href="<: $c.req.uri_for('/version-list') :>">Perl versions</a></li>
       </ul>
       <form class="navbar-form navbar-right" role="form" id="search_module">
         <div class="form-group">

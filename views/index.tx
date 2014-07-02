@@ -6,7 +6,7 @@
   <h1>Web::Module::CoreList</h1>
   <p>This is a web interface for <a href="https://metacpan.org/release/Module-CoreList">Module::CoreList</a>.</p>
   <p>You can learn the Perl5 core modules are introduced in which version.</p>
-  <p><a class="btn btn-primary btn-lg" href="/version-list">Search versions &raquo;</a></p>
+  <p><a class="btn btn-primary btn-lg" href="/version-list">Search Perl versions &raquo;</a></p>
  </div>
 </div>
 

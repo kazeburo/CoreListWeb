@@ -6,12 +6,20 @@
     <div class="col-md-12">
       <h2><: $module :> - <a href="https://metacpan.org/module/<: uri_escape($module) :>">goto metacpan;</a></h2>
       <table class="table table-hover">
+       <thead>
+        <tr>
+            <th style="text-align:left">Perl version</th>
+            <th style="text-align:right">Module version</th>
+        </tr>
+       </thead>
+       <tbody>
       : for $versions -> $version {
         <tr>
             <td align="left"><a href="/v/<: $version.perl :>"><: $version.perl_formated :></a></td>
             <td align="right"><: $version.module :></td>
         </tr>
       : }
+       </tbody>
       </table>
     </div>
   </div>

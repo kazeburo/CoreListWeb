@@ -5,11 +5,25 @@
   <div class="row">
     <div class="col-md-12">
       <h2>Perl versions</h2>
-      <ul id="version-menu-body">
-      : for $versions -> $version {
-        <li><a href="/v/<: $version.version :>"><: $version.formated :></a></li>
-      : }
-      </ul>
+      <table class="table table-hover">
+       <thead>
+        <tr>
+            <th style="text-align:left" width="60%">Perl version</th>
+            <th style="text-align:right" width="20%"># of core modules</th>
+            <th style="text-align:right" width="20%">Release date</th>
+        </tr>
+       </thead>
+       <tbody>
+        : for $versions -> $version {
+        <tr>
+            <td align="left"><a href="/v/<: $version.version :>"><: $version.formated :></a></td>
+            <td align="right"><: $version.coremodules :></td>
+            <td align="right"><: $version.release_date :></td>
+        </tr>
+        : }
+       </tbody>
+      </table>
+
     </div>
   </div>
 </div>

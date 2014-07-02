@@ -20,7 +20,17 @@ body {
   text-align: center;
   margin: 0px;
 }
-
+.perl_release_date {
+  color: #999;
+  padding-left: 2px;
+  font-size: 0.9em;
+}
+td > .perl_release_date {
+  display: none
+}
+td:hover > .perl_release_date {
+  display: inline
+}
 </style>
 </head>
 <body>

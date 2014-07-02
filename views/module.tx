@@ -5,6 +5,24 @@
   <div class="row">
     <div class="col-md-12">
       <h2><: $module :> - <a href="https://metacpan.org/module/<: uri_escape($module) :>">goto metacpan;</a></h2>
+
+      : if $versions.size() {
+      <div class="well well-sm">
+      <: $module :> was first released with perl <a href="/v/<: $first_release.version :>"><: $first_release.format_perl_version :></a>
+      <span class="perl_release_date">(<: $first_release.perl_release_date :>)</span>
+
+      : if $deprecated_in.version {
+        <: if $removed_from.version { :>, <: } else { :> and <: } :>
+        deprecated (will be CPAN-only) in <a href="/v/<: $deprecated_in.version :>"><: $deprecated_in.format_perl_version :></a>
+        <span class="perl_release_date">(<: $deprecated_in.perl_release_date :>)</span>
+      : }
+
+      : if $removed_from.version {
+        and removed from <a href="/v/<: $removed_from.version :>"><: $removed_from.format_perl_version :></a>
+        <span class="perl_release_date">(<: $removed_from.perl_release_date :>)</span>
+      : }
+      </div>
+
       <table class="table table-hover">
        <thead>
         <tr>
@@ -15,12 +33,19 @@
        <tbody>
       : for $versions -> $version {
         <tr>
-            <td align="left"><a href="/v/<: $version.perl :>"><: $version.perl_formated :></a></td>
+            <td align="left">
+            <: if $version.deprecated { :><span class="label label-default">deprecated</span><: } :>
+	    <a href="/v/<: $version.perl :>"><: $version.perl_formated :></a>
+	    <span class="perl_release_date">(<: $version.perl_release_date :>)<span>
+	    </td>
             <td align="right"><: $version.module :></td>
         </tr>
       : }
        </tbody>
       </table>
+      : } else {
+        <div class="well"><: $module :> was not in CORE (or so I think)</div>
+      : }
     </div>
   </div>
 </div>

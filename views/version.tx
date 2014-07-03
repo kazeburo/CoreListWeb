@@ -3,8 +3,20 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
+
+      <div class="row">
+        <div class="col-md-6"><: if $prev { :><a href="/v/<: $prev.version :>">&lt;&lt; <: $prev.formated :></a><: } :></div>
+        <div class="col-md-6" style="text-align:right"><: if $next { :><a href="/v/<: $next.version :>"><: $next.formated :> &gt;&gt;</a><: } :></div>
+      </div>
+
       <h2>Core modules in version <: $formated_version :></h2>
-      <div class="well well-sm"><: $formated_version :> was released in <: $release_date :></div>
+      <div class="well well-sm">
+      <: $formated_version :> was released in <: $release_date :>
+      <: if $new_modules { :>, add <: $new_modules :> module<: $new_modules > 1 ? "s" : "" :> <: } :> 
+      <: if $updated_modules { :><: $new_modules ? " and" : "," :> update <: $updated_modules :> module<: $updated_modules > 1 ? "s" : "" :> <: } :> 
+      <: if $removed_modules.size() { :><: $new_modules || $updated_modules ? " and" : "," :> remove <: $removed_modules.size() :> module<: $removed_modules.size() > 1 ? "s" : "" :> <: } :> 
+      </div>
+
       <table class="table table-hover">
        <thead>
         <tr>
@@ -18,8 +30,12 @@
             <td align="left"><a href="/m/<: $module.name :>"><: $module.name :></a>
 	    <: if $module.deprecated { :><span class="label label-default">deprecated</span><: } :>
             <: if $module.first_release { :><span class="label label-info">first released</span><: } :>
+	    <: if $module.previous_version { :><span class="label label-warning">updated</span><: } :>
 	    </td>
-            <td align="right"><: $module.version :></td>
+            <td align="right">
+	    <: if $module.previous_version { :><span class="previous_version"><: $module.previous_version :></span><: } :>
+	    <: $module.version :>
+	    </td>
         </tr>
         : }
        </tbody>

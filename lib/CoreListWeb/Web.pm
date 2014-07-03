@@ -9,6 +9,7 @@ use version;
 
 use Kossy;
 use Module::CoreList;
+use List::MoreUtils qw/before after/;
 
 our $VERSION = '0.01';
 
@@ -38,8 +39,8 @@ sub module_versions {
     my %seen;
     my @data;
     for my $v (reverse sort keys %Module::CoreList::version) {
-        my $modver = $Module::CoreList::version{$v}->{$module};
-        #next unless $modver;
+        next unless exists $Module::CoreList::version{$v}{$module};
+        my $modver = $Module::CoreList::version{$v}{$module};
         next if $seen{numify_version($v)}++;
         push @data, {
             perl => $v,
@@ -74,12 +75,21 @@ sub is_first_release {
 sub perl_core_modules {
     my ($self,$version) = @_;
     my %modules = %{$Module::CoreList::version{$version}};
-    map {{
-        name => $_,
-        version => $modules{$_},
-        deprecated => Module::CoreList::is_deprecated($_, $version) ? 1 : 0,
-        first_release => is_first_release($_,$version),
-    }} sort keys %modules;
+    my $delta_from = $Module::CoreList::delta{$version}{delta_from};
+    my %prev_versions = $delta_from ? %{$Module::CoreList::version{$delta_from}} : ();
+    my @data;
+    for my $m ( sort keys %modules ) {
+        my $previous_version = $prev_versions{$m} || "undef";
+        my $first_release = is_first_release($m,$version);
+        push @data, {
+            name => $m,
+            version => $modules{$m},
+            deprecated => Module::CoreList::is_deprecated($m, $version) ? 1 : 0,
+            first_release => $first_release,
+            previous_version => (!$first_release && $modules{$m} && $previous_version ne $modules{$m}) ? $previous_version : undef,
+        }
+    }
+    @data;
 }
 
 sub perl_removed_modules {
@@ -137,13 +147,20 @@ get '/v/:version' => sub {
     my ($self,$c) = @_;
     my $version = $c->args->{version} // $c->halt(400);
     $version = numify_version($version);
-
+    my @core_modules = $self->perl_core_modules($version);
+    my @perl_versions = $self->perl_versions();
+    my @next = before { numify_version($_->{version}) eq $version } @perl_versions;
+    my @prev = after { numify_version($_->{version}) eq $version } @perl_versions;
     $c->render('version.tx', {
         version => $version, 
         formated_version => format_perl_version($version),
         release_date => perl_release_date($version),
-        modules => [$self->perl_core_modules($version)],
+        modules => \@core_modules,
+        new_modules => scalar(grep { $_->{first_release} } @core_modules),
+        updated_modules => scalar(grep { $_->{previous_version} } @core_modules),
         removed_modules => [$self->perl_removed_modules($version)],
+        next => @next ? $next[-1] : undef,
+        prev => @prev ? $prev[0] : undef,
     });
 };
 

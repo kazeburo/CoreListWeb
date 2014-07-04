@@ -17,6 +17,8 @@ builder {
     enable 'Static',
         path => qr!^/(?:(?:css|js|img)/|favicon\.ico$)!,
         root => $root_dir . '/public';
+    enable "Deflater",
+      content_type => ['text/css','text/html','text/javascript','application/javascript'];
     $app;
 };
 

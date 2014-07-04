@@ -65,11 +65,15 @@ sub perl_versions {
     }} reverse sort keys %Module::CoreList::version;
 }
 
+my %FIRST_RELEASES;
+for my $p_v ( reverse sort keys %Module::CoreList::version ) {
+    my $numify_version = numify_version($p_v);
+    $FIRST_RELEASES{$_} = $numify_version for keys %{$Module::CoreList::version{$p_v}};
+}
+
 sub is_first_release {
     my ($module,$version) = @_;
-    my $v = Module::CoreList::first_release($module);
-    return unless $v;
-    format_perl_version($v) eq format_perl_version($version) ? 1 : 0;
+    $FIRST_RELEASES{$module} eq numify_version($version) ? 1 : 0;
 }
 
 sub perl_core_modules {

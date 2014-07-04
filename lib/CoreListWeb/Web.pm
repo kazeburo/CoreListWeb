@@ -131,19 +131,30 @@ sub deprecated_version {
 }
 
 
-get '/' => sub {
+my %PAGE_CACHE;
+filter 'page_cache' => sub {
+    my ($app) = @_;
+    sub {
+        my ($self, $c) = @_;
+        return $app->($self, $c) if ! exists $ENV{DYNO}; #dev
+        $PAGE_CACHE{$c->req->uri} ||= $app->($self, $c);
+    };
+};
+
+
+get '/' => [qw/page_cache/] => sub {
     my ($self, $c)  = @_;
     $c->render('index.tx', { corelist_version => $Module::CoreList::VERSION });
 };
 
-get '/version-list' => sub {
+get '/version-list' => [qw/page_cache/] =>  sub {
     my ($self, $c) = @_;
     $c->render('version-list.tx',{
         versions => [$self->perl_versions]
     });
 };
 
-get '/v/:version' => sub {
+get '/v/:version' => [qw/page_cache/] => sub {
     my ($self,$c) = @_;
     my $version = $c->args->{version} // $c->halt(400);
     $version = numify_version($version);
@@ -165,7 +176,7 @@ get '/v/:version' => sub {
 };
 
 
-get '/m/:module' => sub {
+get '/m/:module' => [qw/page_cache/] => sub {
     my ($self, $c) = @_;
     my $module = $c->args->{module} // $c->halt(400);
 

@@ -82,14 +82,14 @@ $proclet->service(
     },
 );
 
-if ( $ENV{DYNO} ) {
+if ( my $service_name = $ENV{SERVICE_NAME} ) {
     warn "detect DYNO. add ping_web service\n";
     $proclet->service(
         every => '16,46 * * * *',
         tag => 'ping_web',
         code => sub {
             my $ua = HTTP::Tiny->new;
-            $ua->get('http://perl-corelistweb.herokuapp.com/');
+            $ua->get('http://'.$service_name.'.herokuapp.com/');
         }
     );
 }

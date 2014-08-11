@@ -1,0 +1,8 @@
+{
+  "name": "perl-corelistweb",
+  "repository": "https://github.com/kazeburo/CoreListWeb",
+  "env": {
+    "BUILDPACK_URL": "https://github.com/kazeburo/heroku-buildpack-perl-procfile.git"
+  }
+}
+

@@ -8,3 +8,4 @@ requires 'Module::CoreList','3';
 requires 'Proclet';
 requires 'HTTP::Tiny';
 requires 'Plack::Middleware::Deflater', '0.12';
+requires 'Server::Starter';

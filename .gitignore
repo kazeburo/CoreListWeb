@@ -1,4 +1,9 @@
 *~
 CoreList-lib
 server.pid
-
+local
+tmp/CoreList-lib/
+tmp/build.log
+tmp/latest-build
+tmp/sources/
+tmp/work/
